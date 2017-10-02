@@ -11,31 +11,31 @@ isMarkdownPreviewView = (object) ->
 module.exports =
   activate: ->
     atom.commands.add 'atom-workspace',
-      'markdown-preview:toggle': =>
+      'markdown-it-preview:toggle': =>
         @toggle()
-      'markdown-preview:copy-html': =>
+      'markdown-it-preview:copy-html': =>
         @copyHtml()
-      'markdown-preview:save-as-html': =>
+      'markdown-it-preview:save-as-html': =>
         @saveAsHtml()
-      'markdown-preview:toggle-break-on-single-newline': ->
-        keyPath = 'markdown-preview.breakOnSingleNewline'
+      'markdown-it-preview:toggle-break-on-single-newline': ->
+        keyPath = 'markdown-it-preview.breakOnSingleNewline'
         atom.config.set(keyPath, not atom.config.get(keyPath))
-      'markdown-preview:toggle-github-style': ->
-        keyPath = 'markdown-preview.useGitHubStyle'
+      'markdown-it-preview:toggle-github-style': ->
+        keyPath = 'markdown-it-preview.useGitHubStyle'
         atom.config.set(keyPath, not atom.config.get(keyPath))
 
     previewFile = @previewFile.bind(this)
-    atom.commands.add '.tree-view .file .name[data-name$=\\.markdown]', 'markdown-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.md]', 'markdown-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.mdown]', 'markdown-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.mkd]', 'markdown-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.mkdown]', 'markdown-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.ron]', 'markdown-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.txt]', 'markdown-preview:preview-file', previewFile
+    atom.commands.add '.tree-view .file .name[data-name$=\\.markdown]', 'markdown-it-preview:preview-file', previewFile
+    atom.commands.add '.tree-view .file .name[data-name$=\\.md]', 'markdown-it-preview:preview-file', previewFile
+    atom.commands.add '.tree-view .file .name[data-name$=\\.mdown]', 'markdown-it-preview:preview-file', previewFile
+    atom.commands.add '.tree-view .file .name[data-name$=\\.mkd]', 'markdown-it-preview:preview-file', previewFile
+    atom.commands.add '.tree-view .file .name[data-name$=\\.mkdown]', 'markdown-it-preview:preview-file', previewFile
+    atom.commands.add '.tree-view .file .name[data-name$=\\.ron]', 'markdown-it-preview:preview-file', previewFile
+    atom.commands.add '.tree-view .file .name[data-name$=\\.txt]', 'markdown-it-preview:preview-file', previewFile
 
     atom.workspace.addOpener (uriToOpen) =>
       [protocol, path] = uriToOpen.split('://')
-      return unless protocol is 'markdown-preview'
+      return unless protocol is 'markdown-it-preview'
 
       try
         path = decodeURI(path)
@@ -60,13 +60,13 @@ module.exports =
     editor = atom.workspace.getActiveTextEditor()
     return unless editor?
 
-    grammars = atom.config.get('markdown-preview.grammars') ? []
+    grammars = atom.config.get('markdown-it-preview.grammars') ? []
     return unless editor.getGrammar().scopeName in grammars
 
     @addPreviewForEditor(editor) unless @removePreviewForEditor(editor)
 
   uriForEditor: (editor) ->
-    "markdown-preview://editor/#{editor.id}"
+    "markdown-it-preview://editor/#{editor.id}"
 
   removePreviewForEditor: (editor) ->
     uri = @uriForEditor(editor)
@@ -82,7 +82,7 @@ module.exports =
     previousActivePane = atom.workspace.getActivePane()
     options =
       searchAllPanes: true
-    if atom.config.get('markdown-preview.openPreviewInSplitPane')
+    if atom.config.get('markdown-it-preview.openPreviewInSplitPane')
       options.split = 'right'
     atom.workspace.open(uri, options).then (markdownPreviewView) ->
       if isMarkdownPreviewView(markdownPreviewView)
@@ -96,7 +96,7 @@ module.exports =
       @addPreviewForEditor(editor)
       return
 
-    atom.workspace.open "markdown-preview://#{encodeURI(filePath)}", searchAllPanes: true
+    atom.workspace.open "markdown-it-preview://#{encodeURI(filePath)}", searchAllPanes: true
 
   copyHtml: ->
     editor = atom.workspace.getActiveTextEditor()
@@ -119,7 +119,7 @@ module.exports =
     editor = atom.workspace.getActiveTextEditor()
     return unless editor?
 
-    grammars = atom.config.get('markdown-preview.grammars') ? []
+    grammars = atom.config.get('markdown-it-preview.grammars') ? []
     return unless editor.getGrammar().scopeName in grammars
 
     uri = @uriForEditor(editor)

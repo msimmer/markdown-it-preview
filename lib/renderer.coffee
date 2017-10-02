@@ -1,14 +1,58 @@
 path = require 'path'
-_ = require 'underscore-plus'
 cheerio = require 'cheerio'
 fs = require 'fs-plus'
 Highlights = require 'highlights'
-roaster = null # Defer until used
 {scopeForFenceName} = require './extension-helper'
 
 highlighter = null
 {resourcePath} = atom.getLoadSettings()
 packagePath = path.dirname(__dirname)
+
+
+atom.getLoadSettings()
+
+MarkdownItPluginLoader = require './markdown-it-plugin-loader'
+pluginLoader = null # Defer until used
+
+MarkdownIt = require 'markdown-it'
+markdownIt = null # Defer until used
+
+defaultMarkdownItSettings =
+  html: true                # Enable HTML tags in source
+  xhtmlOut: false           # Ensure self-closing tags
+  breaks: false             # Convert '\n' in paragraphs into <br>
+
+  # CSS language prefix for fenced blocks. Setting to `lang-` will cause Atom
+  # to transform `<pre />`  to embedded read-only Atom editors
+  langPrefix: 'lang-'
+
+  linkify: false            # Autoconvert URL-like text to links
+
+  # Enable some language-neutral replacement + quotes beautification
+  typographer: false
+
+  # Double and single quotes replacement pairs, when typographer enabled,
+  # and smartquotes on. Could be either a String or an Array.
+  #
+  # For example, you can use '«»„“' for Russian, '„“‚‘' for German,
+  # and ['«\xA0', '\xA0»', '‹\xA0', '\xA0›'] for French (including nbsp).
+  quotes: '“”‘’'
+
+  # Highlighter function. Should return escaped HTML,
+  # or '' if the source string is not changed and should be escaped externaly.
+  # If result starts with <pre... internal wrapper is skipped. Should be used in
+  # conjunction with `langPrefix`
+  highlight: -> ''
+
+# Options loaded from Settings pane
+editorMarkdownItSettings = () ->
+  html:         atom.config.get 'markdown-it-preview.HTMLTagsInSource'
+  xhtmlOut:     atom.config.get 'markdown-it-preview.generateXHTMLOutput'
+  breaks:       atom.config.get 'markdown-it-preview.convertNewlinesToBRTags'
+  langPrefix:   atom.config.get 'markdown-it-preview.languagePrefix'
+  linkify:      atom.config.get 'markdown-it-preview.createLinksFromURLs'
+  typographer:  atom.config.get 'markdown-it-preview.enableTypographer'
+  quotes:       atom.config.get 'markdown-it-preview.quotationCharacters'
 
 exports.toDOMFragment = (text='', filePath, grammar, callback) ->
   render text, filePath, (error, html) ->
@@ -31,22 +75,26 @@ exports.toHTML = (text='', filePath, grammar, callback) ->
     html = tokenizeCodeBlocks(html, defaultCodeLanguage)
     callback(null, html)
 
+exports.reload = () ->
+  markdownItSettings = Object.assign({}, defaultMarkdownItSettings, editorMarkdownItSettings())
+  markdownIt = new MarkdownIt(markdownItSettings)
+
+  pluginLoader = new MarkdownItPluginLoader({markdownIt})
+  pluginLoader.loadMarkdownItPlugins()
+
+  markdownIt
+
 render = (text, filePath, callback) ->
-  roaster ?= require 'roaster'
-  options =
-    sanitize: false
-    breaks: atom.config.get('markdown-preview.breakOnSingleNewline')
+  markdownIt ?= exports.reload()
 
   # Remove the <!doctype> since otherwise marked will escape it
   # https://github.com/chjj/marked/issues/354
   text = text.replace(/^\s*<!doctype(\s+.*)?>\s*/i, '')
 
-  roaster text, options, (error, html) ->
-    return callback(error) if error?
-
-    html = sanitize(html)
-    html = resolveImagePaths(html, filePath)
-    callback(null, html.trim())
+  html = markdownIt.render(text)
+  html = sanitize(html)
+  html = resolveImagePaths(html, filePath)
+  callback(null, html.trim())
 
 sanitize = (html) ->
   o = cheerio.load(html)
@@ -109,8 +157,6 @@ convertCodeBlocksToAtomEditors = (domFragment, defaultLanguage='text') ->
     fenceName = codeBlock.getAttribute('class')?.replace(/^lang-/, '') ? defaultLanguage
 
     editorElement = document.createElement('atom-text-editor')
-    editorElement.setAttributeNode(document.createAttribute('gutter-hidden'))
-    editorElement.removeAttribute('tabindex') # make read-only
 
     preElement.parentNode.insertBefore(editorElement, preElement)
     preElement.remove()
@@ -126,6 +172,10 @@ convertCodeBlocksToAtomEditors = (domFragment, defaultLanguage='text') ->
         cursorLineDecoration.destroy()
     else
       editor.getDecorations(class: 'cursor-line', type: 'line')[0].destroy()
+
+    # Modify attributes once component mounted
+    editorElement.setAttributeNode(document.createAttribute('gutter-hidden'))
+    editorElement.removeAttribute('tabindex') # make read-only
 
   domFragment
 

@@ -1,22 +1,59 @@
-# Markdown Preview package
-[![macOS Build Status](https://travis-ci.org/atom/markdown-preview.svg?branch=master)](https://travis-ci.org/atom/markdown-preview) [![Windows Build Status](https://ci.appveyor.com/api/projects/status/bvh0evhh4v6w9b29/branch/master?svg=true)](https://ci.appveyor.com/project/Atom/markdown-preview/branch/master) [![Dependency Status](https://david-dm.org/atom/markdown-preview.svg)](https://david-dm.org/atom/markdown-preview)
+# `markdown-it-preview`
 
-Show the rendered HTML markdown to the right of the current editor using <kbd>ctrl-shift-m</kbd>.
+This repo is a fork of the core [`markdown-preview`](https://github.com/atom/markdown-preview) package for [Atom](https://atom.io/) which replaces the [Roaster](https://github.com/gjtorikian/roaster) Markdown parser with [MarkdownIt](https://github.com/markdown-it/markdown-it).
 
-It is currently enabled for `.markdown`, `.md`, `.mdown`, `.mkd`, `.mkdown`, `.ron`, and `.txt` files.
+MarkdownIt plugins can be added on a per-project basis using a config file in each project's root directory.
 
-![markdown-preview](https://cloud.githubusercontent.com/assets/378023/10013086/24cad23e-6149-11e5-90e6-663009210218.png)
+[**Demo project**](https://github.com/msimmer/markdown-it-preview-demo)
+
+## Install
+
+Clone the repo, install dependencies, and link with `apm`
+
+```
+$ npm i
+$ apm link
+```
+
+## Enable
+
+Enable `markdown-it-preview` in Atom's settings panel and update any package settings.
+
+The keybindings will probably conflict with the core `markdown-preview` package, so good to disable that while you're there.
 
 ## Customize
 
-By default Markdown Preview uses the colors of the active syntax theme. Enable `Use GitHub.com style` in the __package settings__ to make it look closer to how markdown files get rendered on github.com.
+The settings from the core package still apply.  Additional options for  [`markdown-it`](https://github.com/markdown-it/markdown-it#init-with-presets-and-options) can be set there as well.
 
-![markdown-preview GitHub style](https://cloud.githubusercontent.com/assets/378023/10013087/24ccc7ec-6149-11e5-97ea-53a842a715ea.png)
+## Plugins
 
-To customize even further, the styling can be overridden in your `styles.less` file. For example:
+Start a new project and add some MarkdownIt plugins.  Note that the `markdown-it` package does not need to be installed in the new project.
 
-```css
-.markdown-preview.markdown-preview {
-  background-color: #444;
+```console
+$ mkdir my-project && cd $_
+$ npm init -y
+$ npm i -S markdown-it-emoji
+```
+
+Add the `markdown-it-plugin.config.js` file to let `markdown-it-preview` know which plugins need to be loaded
+
+```js
+module.exports = {
+  plugins: [
+    'markdown-it-emoji'
+  ],
 }
 ```
+
+Write some Markdown and preview in Atom!
+
+```console
+$ echo ':tada: :fireworks:' > test.md
+$ atom test.md
+```
+
+<kbd>ctrl-shift-m</kbd>
+
+## License
+
+MIT

@@ -1,21 +1,21 @@
 {
-  "name": "markdown-preview",
+  "name": "markdown-it-preview",
   "version": "0.159.14",
   "main": "./lib/main",
   "description": "Open a rendered version of the Markdown in the current editor with `ctrl-shift-m`.",
-  "repository": "https://github.com/atom/markdown-preview",
+  "repository": "https://github.com/msimmer/markdown-preview.git",
   "license": "MIT",
   "engines": {
     "atom": "*"
   },
   "dependencies": {
     "cheerio": "0.15.0",
-    "fs-plus": "^3.0.0",
+    "fs-plus": "^3.0.1",
     "highlights": "^3.0.1",
-    "roaster": "^1.2.1",
+    "lodash": "^4.17.4",
+    "markdown-it": "^8.4.0",
     "temp": "^0.8.1",
-    "underscore-plus": "^1.0.0",
-    "wrench": "^1.5.0"
+    "wrench": "^1.5.9"
   },
   "devDependencies": {
     "coffeelint": "^1.9.7"
@@ -24,11 +24,6 @@
     "MarkdownPreviewView": "createMarkdownPreviewView"
   },
   "configSchema": {
-    "breakOnSingleNewline": {
-      "type": "boolean",
-      "default": false,
-      "description": "In Markdown, a single newline character doesn't cause a line break in the generated HTML. In GitHub Flavored Markdown, that is not true. Enable this config option to insert line breaks in rendered HTML for single newlines in Markdown source."
-    },
     "liveUpdate": {
       "type": "boolean",
       "default": true,
@@ -56,6 +51,53 @@
       "type": "boolean",
       "default": false,
       "description": "Use the same CSS styles for preview as the ones used on GitHub.com."
+    },
+    "HTMLTagsInSource": {
+      "title": "Enable HTML",
+      "type": "boolean",
+      "default": false,
+      "description": "Enable HTML tags in source."
+    },
+    "generateXHTMLOutput": {
+      "title": "Generate valid XHTML output",
+      "type": "boolean",
+      "default": false,
+      "description": "Explicitly close all self-closing HTML tags."
+    },
+    "convertNewlinesToBRTags": {
+      "title": "Convert newlines to BR tags",
+      "type": "boolean",
+      "default": false,
+      "description": "Convert newlines in paragraphs into BR tags."
+    },
+    "languagePrefix": {
+      "title": "Language prefix",
+      "type": "string",
+      "default": "language-",
+      "description": "CSS language prefix for fenced blocks. Can be useful for external highlighters."
+    },
+    "createLinksFromURLs": {
+      "title": "Create links from URLs",
+      "type": "boolean",
+      "default": false,
+      "description": "Create A tags from URL-like text."
+    },
+    "enableTypographer": {
+      "title": "Enable typographer",
+      "type": "boolean",
+      "default": false,
+      "description": "Enable some language-neutral replacement and quotes beautification."
+    },
+    "quotationCharacters": {
+      "title": "Quotation characters",
+      "type": "array",
+      "default": [
+        "“",
+        "”",
+        "‘",
+        "’"
+      ],
+      "description": "Double and single quotes replacement pairs, when typographer enabled, and smartquotes on."
     }
   }
 }
