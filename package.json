@@ -73,7 +73,7 @@
     "languagePrefix": {
       "title": "Language prefix",
       "type": "string",
-      "default": "language-",
+      "default": "lang-",
       "description": "CSS language prefix for fenced blocks. Can be useful for external highlighters."
     },
     "createLinksFromURLs": {
