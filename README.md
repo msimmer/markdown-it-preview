@@ -8,18 +8,13 @@ MarkdownIt plugins can be added on a per-project basis using a config file in ea
 
 ## Install
 
-Clone the repo, install dependencies, and link with `apm`
+1. Search for and install markdown-it-preview in Atom's Settings view, or
 
+```console
+$ apm install markdown-it-preview
 ```
-$ npm i
-$ apm link
-```
 
-## Enable
-
-Enable `markdown-it-preview` in Atom's settings panel and update any package settings.
-
-The keybindings will probably conflict with the core `markdown-preview` package, so good to disable that while you're there.
+2. Disable `markdown-preview`
 
 ## Customize
 
@@ -45,15 +40,15 @@ module.exports = {
 }
 ```
 
-Write some Markdown and preview in Atom!
+Write some Markdown
 
 ```console
 $ echo ':tada: :fireworks:' > test.md
 $ atom test.md
 ```
 
-<kbd>ctrl-shift-m</kbd>
+Toggle Preview with <kbd>CTRL-SHIFT-M</kbd>
 
 ## License
 
-MIT
+[MIT](https://github.com/msimmer/markdown-it-preview/blob/master/LICENSE.md)
