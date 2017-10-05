@@ -8,13 +8,13 @@ MarkdownIt plugins can be added on a per-project basis using a config file in ea
 
 ## Install
 
-1. Search for and install markdown-it-preview in Atom's Settings view, or
+<ol><li>Search for and install <code>markdown-it-preview</code> in Atom's Settings view, or</li></ol>
 
-```console
-$ apm install markdown-it-preview
-```
+ ```console
+ $ apm install markdown-it-preview
+ ```
 
-2. Disable `markdown-preview`
+<ol start=2><li>Disable <code>markdown-preview</code></li></ol>
 
 ## Customize
 
