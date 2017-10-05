@@ -1,9 +1,14 @@
 {
   "name": "markdown-it-preview",
-  "version": "0.159.14",
+  "version": "0.0.0",
   "main": "./lib/main",
-  "description": "Open a rendered version of the Markdown in the current editor with `ctrl-shift-m`.",
-  "repository": "https://github.com/msimmer/markdown-preview.git",
+  "description": "Markdown Preview that supports MarkdownIt plugins on a per-project basis.",
+  "keywords": [
+    "markdown",
+    "markdown-it",
+    "commonmark"
+  ],
+  "repository": "https://github.com/msimmer/markdown-it-preview.git",
   "license": "MIT",
   "engines": {
     "atom": "*"
