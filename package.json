@@ -57,43 +57,43 @@
       "default": false,
       "description": "Use the same CSS styles for preview as the ones used on GitHub.com."
     },
-    "HTMLTagsInSource": {
+    "html": {
       "title": "Enable HTML",
       "type": "boolean",
       "default": false,
       "description": "Enable HTML tags in source."
     },
-    "generateXHTMLOutput": {
+    "xhtmlOut": {
       "title": "Generate valid XHTML output",
       "type": "boolean",
       "default": false,
       "description": "Explicitly close all self-closing HTML tags."
     },
-    "convertNewlinesToBRTags": {
+    "breaks": {
       "title": "Convert newlines to BR tags",
       "type": "boolean",
       "default": false,
       "description": "Convert newlines in paragraphs into BR tags."
     },
-    "languagePrefix": {
+    "langPrefix": {
       "title": "Language prefix",
       "type": "string",
       "default": "lang-",
       "description": "CSS language prefix for fenced blocks. Can be useful for external highlighters."
     },
-    "createLinksFromURLs": {
+    "linkify": {
       "title": "Create links from URLs",
       "type": "boolean",
       "default": false,
       "description": "Create A tags from URL-like text."
     },
-    "enableTypographer": {
+    "typographer": {
       "title": "Enable typographer",
       "type": "boolean",
       "default": false,
       "description": "Enable some language-neutral replacement and quotes beautification."
     },
-    "quotationCharacters": {
+    "quotes": {
       "title": "Quotation characters",
       "type": "array",
       "default": [

@@ -45,14 +45,14 @@ defaultMarkdownItSettings =
   highlight: -> ''
 
 # Options loaded from Settings pane
-editorMarkdownItSettings = () ->
-  html:         atom.config.get 'markdown-it-preview.HTMLTagsInSource'
-  xhtmlOut:     atom.config.get 'markdown-it-preview.generateXHTMLOutput'
-  breaks:       atom.config.get 'markdown-it-preview.convertNewlinesToBRTags'
-  langPrefix:   atom.config.get 'markdown-it-preview.languagePrefix'
-  linkify:      atom.config.get 'markdown-it-preview.createLinksFromURLs'
-  typographer:  atom.config.get 'markdown-it-preview.enableTypographer'
-  quotes:       atom.config.get 'markdown-it-preview.quotationCharacters'
+getMarkdownItSettings = () ->
+  # return new object to prevent mutation down the line
+  __settings = atom.config.getAll('markdown-it-preview')[0].value
+  settings = {}
+  for key, value of __settings
+    settings[key] = value
+
+  settings
 
 exports.toDOMFragment = (text='', filePath, grammar, callback) ->
   render text, filePath, (error, html) ->
@@ -77,7 +77,7 @@ exports.toHTML = (text='', filePath, grammar, callback) ->
 
 exports.reload = () ->
   markdownItSettings = {}
-  for key, value of editorMarkdownItSettings()
+  for key, value of getMarkdownItSettings()
     markdownItSettings[key] = value || defaultMarkdownItSettings[key]
 
   markdownIt = new MarkdownIt(markdownItSettings)
