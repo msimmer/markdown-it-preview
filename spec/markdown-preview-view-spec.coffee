@@ -1,8 +1,10 @@
 path = require 'path'
 fs = require 'fs-plus'
 temp = require 'temp'
-MarkdownPreviewView = require '../lib/markdown-preview-view'
 url = require 'url'
+
+MarkdownPreviewView = require '../lib/markdown-preview-view'
+renderer = require '../lib/renderer'
 
 describe "MarkdownPreviewView", ->
   [file, preview, workspaceElement] = []
@@ -173,7 +175,10 @@ describe "MarkdownPreviewView", ->
   describe "gfm newlines", ->
     describe "when gfm newlines are not enabled", ->
       it "creates a single paragraph with <br>", ->
-        atom.config.set('markdown-it-preview.convertNewlinesToBRTags', false)
+        atom.config.set('markdown-it-preview.breaks', false)
+
+        waitsFor ->
+          renderer.reload()
 
         waitsForPromise ->
           preview.renderMarkdown()
@@ -183,12 +188,17 @@ describe "MarkdownPreviewView", ->
 
     describe "when gfm newlines are enabled", ->
       it "creates a single paragraph with no <br>", ->
-        atom.config.set('markdown-it-preview.convertNewlinesToBRTags', true)
+        atom.config.set('markdown-it-preview.breaks', true)
+
+        waitsFor ->
+          renderer.reload()
 
         waitsForPromise ->
           preview.renderMarkdown()
 
         runs ->
+          console.log atom.config.get('markdown-it-preview.breaks')
+          console.log preview.element
           expect(preview.element.querySelectorAll("p:last-child br").length).toBe 1
 
   describe "when core:save-as is triggered", ->

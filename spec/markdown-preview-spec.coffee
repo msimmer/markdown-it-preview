@@ -374,7 +374,7 @@ describe "Markdown preview package", ->
 
   describe "sanitization", ->
     it "removes script tags and attributes that commonly contain inline scripts", ->
-      atom.config.set 'markdown-it-preview.HTMLTagsInSource', true
+      atom.config.set 'markdown-it-preview.html', true
 
       waitsForPromise -> atom.workspace.open("subdir/evil.md")
       runs -> atom.commands.dispatch workspaceElement, 'markdown-it-preview:toggle'
@@ -390,7 +390,7 @@ describe "Markdown preview package", ->
         """
 
     it "remove the first <!doctype> tag at the beginning of the file", ->
-      atom.config.set 'markdown-it-preview.HTMLTagsInSource', true
+      atom.config.set 'markdown-it-preview.html', true
 
       waitsForPromise -> atom.workspace.open("subdir/doctype-tag.md")
       runs -> atom.commands.dispatch workspaceElement, 'markdown-it-preview:toggle'
