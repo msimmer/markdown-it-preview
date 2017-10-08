@@ -145,13 +145,13 @@ class MarkdownPreviewView
       else
         @element.removeAttribute('data-use-github-style')
 
-    @disposables.add atom.config.onDidChange 'markdown-it-preview.HTMLTagsInSource', () -> changeHandler(true)
-    @disposables.add atom.config.onDidChange 'markdown-it-preview.generateXHTMLOutput', () -> changeHandler(true)
-    @disposables.add atom.config.onDidChange 'markdown-it-preview.convertNewlinesToBRTags', () -> changeHandler(true)
-    @disposables.add atom.config.onDidChange 'markdown-it-preview.languagePrefix', () -> changeHandler(true)
-    @disposables.add atom.config.onDidChange 'markdown-it-preview.createLinksFromURLs', () -> changeHandler(true)
-    @disposables.add atom.config.onDidChange 'markdown-it-preview.enableTypographer', () -> changeHandler(true)
-    @disposables.add atom.config.onDidChange 'markdown-it-preview.quotationCharacters', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.html', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.xhtmlOut', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.breaks', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.langPrefix', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.linkify', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.typographer', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.quotes', () -> changeHandler(true)
 
   renderMarkdown: ->
     @showLoading() unless @loaded
