@@ -1,16 +1,16 @@
 'atom-workspace, atom-workspace atom-text-editor':
-  'ctrl-shift-m': 'markdown-preview:toggle'
+  'ctrl-shift-m': 'markdown-it-preview:toggle'
 
-'.platform-darwin .markdown-preview':
-  'cmd-+': 'markdown-preview:zoom-in'
-  'cmd-=': 'markdown-preview:zoom-in'
-  'cmd--': 'markdown-preview:zoom-out'
-  'cmd-_': 'markdown-preview:zoom-out'
-  'cmd-0': 'markdown-preview:reset-zoom'
+'.platform-darwin .markdown-it-preview':
+  'cmd-+': 'markdown-it-preview:zoom-in'
+  'cmd-=': 'markdown-it-preview:zoom-in'
+  'cmd--': 'markdown-it-preview:zoom-out'
+  'cmd-_': 'markdown-it-preview:zoom-out'
+  'cmd-0': 'markdown-it-preview:reset-zoom'
 
 '.platform-win32 .markdown-preview, .platform-linux .markdown-preview':
-  'ctrl-+': 'markdown-preview:zoom-in'
-  'ctrl-=': 'markdown-preview:zoom-in'
-  'ctrl--': 'markdown-preview:zoom-out'
-  'ctrl-_': 'markdown-preview:zoom-out'
-  'ctrl-0': 'markdown-preview:reset-zoom'
+  'ctrl-+': 'markdown-it-preview:zoom-in'
+  'ctrl-=': 'markdown-it-preview:zoom-in'
+  'ctrl--': 'markdown-it-preview:zoom-out'
+  'ctrl-_': 'markdown-it-preview:zoom-out'
+  'ctrl-0': 'markdown-it-preview:reset-zoom'

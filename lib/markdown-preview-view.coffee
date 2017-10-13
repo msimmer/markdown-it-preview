@@ -1,8 +1,8 @@
 path = require 'path'
+fs = require 'fs-plus'
 
 {Emitter, Disposable, CompositeDisposable, File} = require 'atom'
-_ = require 'underscore-plus'
-fs = require 'fs-plus'
+debounce = require 'lodash/debounce'
 
 renderer = require './renderer'
 
@@ -102,8 +102,8 @@ class MarkdownPreviewView
     null
 
   handleEvents: ->
-    @disposables.add atom.grammars.onDidAddGrammar => _.debounce((=> @renderMarkdown()), 250)
-    @disposables.add atom.grammars.onDidUpdateGrammar _.debounce((=> @renderMarkdown()), 250)
+    @disposables.add atom.grammars.onDidAddGrammar => debounce((=> @renderMarkdown()), 250)
+    @disposables.add atom.grammars.onDidUpdateGrammar debounce((=> @renderMarkdown()), 250)
 
     atom.commands.add @element,
       'core:save-as': (event) =>
@@ -111,16 +111,17 @@ class MarkdownPreviewView
         @saveAs()
       'core:copy': (event) =>
         event.stopPropagation() if @copyToClipboard()
-      'markdown-preview:zoom-in': =>
+      'markdown-it-preview:zoom-in': =>
         zoomLevel = parseFloat(getComputedStyle(@element).zoom)
         @element.style.zoom = zoomLevel + 0.1
-      'markdown-preview:zoom-out': =>
+      'markdown-it-preview:zoom-out': =>
         zoomLevel = parseFloat(getComputedStyle(@element).zoom)
         @element.style.zoom = zoomLevel - 0.1
-      'markdown-preview:reset-zoom': =>
+      'markdown-it-preview:reset-zoom': =>
         @element.style.zoom = 1
 
-    changeHandler = =>
+    changeHandler = (reload=false) =>
+      renderer.reload() if reload
       @renderMarkdown()
 
       pane = atom.workspace.paneForItem(this)
@@ -131,20 +132,26 @@ class MarkdownPreviewView
       @disposables.add @file.onDidChange(changeHandler)
     else if @editor?
       @disposables.add @editor.getBuffer().onDidStopChanging ->
-        changeHandler() if atom.config.get 'markdown-preview.liveUpdate'
+        changeHandler() if atom.config.get 'markdown-it-preview.liveUpdate'
       @disposables.add @editor.onDidChangePath => @emitter.emit 'did-change-title'
       @disposables.add @editor.getBuffer().onDidSave ->
-        changeHandler() unless atom.config.get 'markdown-preview.liveUpdate'
+        changeHandler() unless atom.config.get 'markdown-it-preview.liveUpdate'
       @disposables.add @editor.getBuffer().onDidReload ->
-        changeHandler() unless atom.config.get 'markdown-preview.liveUpdate'
+        changeHandler() unless atom.config.get 'markdown-it-preview.liveUpdate'
 
-    @disposables.add atom.config.onDidChange 'markdown-preview.breakOnSingleNewline', changeHandler
-
-    @disposables.add atom.config.observe 'markdown-preview.useGitHubStyle', (useGitHubStyle) =>
+    @disposables.add atom.config.observe 'markdown-it-preview.useGitHubStyle', (useGitHubStyle) =>
       if useGitHubStyle
         @element.setAttribute('data-use-github-style', '')
       else
         @element.removeAttribute('data-use-github-style')
+
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.html', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.xhtmlOut', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.breaks', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.langPrefix', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.linkify', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.typographer', () -> changeHandler(true)
+    @disposables.add atom.config.onDidChange 'markdown-it-preview.quotes', () -> changeHandler(true)
 
   renderMarkdown: ->
     @showLoading() unless @loaded
@@ -197,9 +204,9 @@ class MarkdownPreviewView
 
   getURI: ->
     if @file?
-      "markdown-preview://#{@getPath()}"
+      "markdown-it-preview://#{@getPath()}"
     else
-      "markdown-preview://editor/#{@editorId}"
+      "markdown-it-preview://editor/#{@editorId}"
 
   getPath: ->
     if @file?
