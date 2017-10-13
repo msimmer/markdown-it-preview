@@ -95,7 +95,7 @@ render = (text, filePath, callback) ->
   text = text.replace(/^\s*<!doctype(\s+.*)?>\s*/i, '')
 
   html = markdownIt.render(text)
-  html = createDOMPurify().sanitize(html, {ALLOW_UNKNOWN_PROTOCOLS: atom.config.get('markdown-preview.allowUnsafeProtocols')})
+  html = createDOMPurify().sanitize(html, {ALLOW_UNKNOWN_PROTOCOLS: atom.config.get('markdown-it-preview.allowUnsafeProtocols')})
   html = resolveImagePaths(html, filePath)
   callback(null, html.trim())
 
@@ -103,8 +103,9 @@ resolveImagePaths = (html, filePath) ->
   [rootDirectory] = atom.project.relativizePath(filePath)
   o = document.createElement('div')
   o.innerHTML = html
+
   for img in o.querySelectorAll('img')
-    if src = img.src
+    if src = img.getAttribute('src')
       continue if src.match(/^(https?|atom):\/\//)
       continue if src.startsWith(process.resourcesPath)
       continue if src.startsWith(resourcePath)
@@ -116,6 +117,9 @@ resolveImagePaths = (html, filePath) ->
             src = path.join(rootDirectory, src.substring(1))
       else
         src = path.resolve(path.dirname(filePath), src)
+
+      img.src = src
+
 
   o.innerHTML
 
