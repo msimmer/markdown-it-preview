@@ -28,6 +28,9 @@
   "deserializers": {
     "MarkdownPreviewView": "createMarkdownPreviewView"
   },
+  "activationCommands": {
+    "atom-workspace": "markdown-it-preview:toggle"
+  },
   "configSchema": {
     "liveUpdate": {
       "type": "boolean",
