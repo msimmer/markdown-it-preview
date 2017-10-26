@@ -102,8 +102,9 @@ class MarkdownPreviewView
     null
 
   handleEvents: ->
-    @disposables.add atom.grammars.onDidAddGrammar => debounce((=> @renderMarkdown()), 250)
-    @disposables.add atom.grammars.onDidUpdateGrammar debounce((=> @renderMarkdown()), 250)
+    lazyRenderMarkdown = debounce((=> @renderMarkdown()), 250)
+    @disposables.add atom.grammars.onDidAddGrammar -> lazyRenderMarkdown()
+    @disposables.add atom.grammars.onDidUpdateGrammar -> lazyRenderMarkdown()
 
     atom.commands.add @element,
       'core:save-as': (event) =>
