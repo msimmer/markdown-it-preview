@@ -7,8 +7,6 @@ Highlights = require 'highlights'
 highlighter = null
 {resourcePath} = atom.getLoadSettings()
 packagePath = path.dirname(__dirname)
-codeBlocks = new Map()
-grammarSubscription = null
 
 
 atom.getLoadSettings()
@@ -126,13 +124,6 @@ resolveImagePaths = (html, filePath) ->
   o.innerHTML
 
 convertCodeBlocksToAtomEditors = (domFragment, defaultLanguage='text') ->
-  codeBlocks.clear()
-  grammarSubscription?.dispose()
-  grammarSubscription = atom.grammars.onDidAddGrammar ->
-    codeBlocks.forEach (fenceName, editor) ->
-      if grammar = atom.grammars.grammarForScopeName(scopeForFenceName(fenceName))
-        editor.setGrammar(grammar)
-
   if fontFamily = atom.config.get('editor.fontFamily')
     for codeElement in domFragment.querySelectorAll('code')
       codeElement.style.fontFamily = fontFamily
@@ -158,12 +149,6 @@ convertCodeBlocksToAtomEditors = (domFragment, defaultLanguage='text') ->
     # Remove line decorations from code blocks.
     for cursorLineDecoration in editor.cursorLineDecorations
       cursorLineDecoration.destroy()
-
-    codeBlocks.set(editor, fenceName)
-
-    # Modify attributes once component mounted
-    editorElement.setAttributeNode(document.createAttribute('gutter-hidden'))
-    editorElement.removeAttribute('tabindex') # make read-only
 
   domFragment
 
