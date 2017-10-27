@@ -1,5 +1,6 @@
 url = require 'url'
 fs = require 'fs-plus'
+{CompositeDisposable} = require 'atom'
 
 MarkdownPreviewView = null
 renderer = null
@@ -10,30 +11,27 @@ isMarkdownPreviewView = (object) ->
 
 module.exports =
   activate: ->
-    atom.commands.add 'atom-workspace',
+    @disposables = new CompositeDisposable()
+    @disposables.add atom.commands.add 'atom-workspace',
       'markdown-it-preview:toggle': =>
         @toggle()
       'markdown-it-preview:copy-html': =>
-        @copyHtml()
+        @copyHTML()
       'markdown-it-preview:save-as-html': =>
-        @saveAsHtml()
+        @saveAsHTML()
       'markdown-it-preview:toggle-break-on-single-newline': ->
-        keyPath = 'markdown-it-preview.breakOnSingleNewline'
+        keyPath = 'markdown-preview.breakOnSingleNewline'
         atom.config.set(keyPath, not atom.config.get(keyPath))
       'markdown-it-preview:toggle-github-style': ->
         keyPath = 'markdown-it-preview.useGitHubStyle'
         atom.config.set(keyPath, not atom.config.get(keyPath))
 
     previewFile = @previewFile.bind(this)
-    atom.commands.add '.tree-view .file .name[data-name$=\\.markdown]', 'markdown-it-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.md]', 'markdown-it-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.mdown]', 'markdown-it-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.mkd]', 'markdown-it-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.mkdown]', 'markdown-it-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.ron]', 'markdown-it-preview:preview-file', previewFile
-    atom.commands.add '.tree-view .file .name[data-name$=\\.txt]', 'markdown-it-preview:preview-file', previewFile
+    for extension in ['markdown', 'md', 'mdown', 'mkd', 'mkdown', 'ron', 'txt'].
+      @disposables.add atom.commands.add ".tree-view .file .name[data-name$=\\.#{extension}]",
+        'markdown-preview:preview-file', previewFile
 
-    atom.workspace.addOpener (uriToOpen) =>
+    @disposables.add atom.workspace.addOpener (uriToOpen) =>
       [protocol, path] = uriToOpen.split('://')
       return unless protocol is 'markdown-it-preview'
 
@@ -46,6 +44,9 @@ module.exports =
         @createMarkdownPreviewView(editorId: path.substring(7))
       else
         @createMarkdownPreviewView(filePath: path)
+
+  deactivate: ->
+    @disposables.dispose()
 
   createMarkdownPreviewView: (state) ->
     if state.editorId or fs.isFileSync(state.filePath)
@@ -98,7 +99,7 @@ module.exports =
 
     atom.workspace.open "markdown-it-preview://#{encodeURI(filePath)}", searchAllPanes: true
 
-  copyHtml: ->
+  copyHTML: ->
     editor = atom.workspace.getActiveTextEditor()
     return unless editor?
 
@@ -110,7 +111,7 @@ module.exports =
       else
         atom.clipboard.write(html)
 
-  saveAsHtml: ->
+  saveAsHTML: ->
     activePane = atom.workspace.getActivePaneItem()
     if isMarkdownPreviewView(activePane)
       activePane.saveAs()
