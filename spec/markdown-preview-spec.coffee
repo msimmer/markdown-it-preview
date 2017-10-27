@@ -455,7 +455,7 @@ describe "Markdown preview package", ->
 
     it "updates the rendering style immediately when the configuration is changed", ->
       waitsForPromise -> atom.workspace.open("subdir/simple.md")
-      runs -> atom.commands.dispatch workspaceElement, 'markdown-it-preview:toggle'
+      runs -> atom.commands.dispatch atom.workspace.getActiveTextEditor().getElement(), 'markdown-it-preview:toggle'
       expectPreviewInSplitPane()
 
       runs ->
@@ -470,7 +470,7 @@ describe "Markdown preview package", ->
   describe "when Save as Html is triggered", ->
     beforeEach ->
       waitsForPromise -> atom.workspace.open("subdir/simple.markdown")
-      runs -> atom.commands.dispatch workspaceElement, 'markdown-it-preview:toggle'
+      runs -> atom.commands.dispatch atom.workspace.getActiveTextEditor().getElement(), 'markdown-it-preview:toggle'
       expectPreviewInSplitPane()
 
     it "saves the HTML when it is triggered and the editor has focus", ->
@@ -482,7 +482,7 @@ describe "Markdown preview package", ->
 
       runs ->
         spyOn(atom, 'showSaveDialogSync').andReturn(outputPath)
-        atom.commands.dispatch workspaceElement, 'markdown-it-preview:save-as-html'
+        atom.commands.dispatch atom.workspace.getActiveTextEditor().getElement(), 'markdown-it-preview:save-as-html'
 
       waitsFor ->
         fs.existsSync(outputPath)
@@ -499,7 +499,7 @@ describe "Markdown preview package", ->
 
       runs ->
         spyOn(atom, 'showSaveDialogSync').andReturn(outputPath)
-        atom.commands.dispatch workspaceElement, 'markdown-it-preview:save-as-html'
+        atom.commands.dispatch editorPane.getActiveItem().getElement(), 'markdown-it-preview:save-as-html'
 
       waitsFor ->
         fs.existsSync(outputPath)

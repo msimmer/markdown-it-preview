@@ -7,7 +7,7 @@ MarkdownPreviewView = require '../lib/markdown-preview-view'
 renderer = require '../lib/renderer'
 
 describe "MarkdownPreviewView", ->
-  [preview, activationPromise, workspaceElement] = []
+  [preview, activationPromise,  workspaceElement] = []
 
   beforeEach ->
     jasmine.useRealClock()
