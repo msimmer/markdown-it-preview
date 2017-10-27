@@ -1,7 +1,7 @@
 'menu': [
   'label': 'Packages'
   'submenu': [
-    'label': 'Markdown Preview'
+    'label': 'Markdown It Preview'
     'submenu': [
       'label': 'Toggle Preview'
       'command': 'markdown-it-preview:toggle'
@@ -11,20 +11,25 @@
 
 'context-menu':
   '.markdown-it-preview': [
-    {label: 'Copy As HTML', command: 'core:copy'}
     {label: 'Save As HTML\u2026', command: 'core:save-as'}
   ]
+  '.markdown-it-preview.has-selection': [
+    {label: 'Copy', command: 'core:copy'}
+  ]
+  '.markdown-it-preview:not(.has-selection)': [
+    {label: 'Copy As HTML', command: 'core:copy'}
+  ]
   '.tree-view .file .name[data-name$=\\.markdown]':
-    [{label: 'Markdown Preview', command:  'markdown-it-preview:preview-file'}]
+    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
   '.tree-view .file .name[data-name$=\\.md]':
-    [{label: 'Markdown Preview', command:  'markdown-it-preview:preview-file'}]
+    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
   '.tree-view .file .name[data-name$=\\.mdown]':
-    [{label: 'Markdown Preview', command:  'markdown-it-preview:preview-file'}]
+    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
   '.tree-view .file .name[data-name$=\\.mkd]':
-    [{label: 'Markdown Preview', command:  'markdown-it-preview:preview-file'}]
+    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
   '.tree-view .file .name[data-name$=\\.mkdown]':
-    [{label: 'Markdown Preview', command:  'markdown-it-preview:preview-file'}]
+    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
   '.tree-view .file .name[data-name$=\\.ron]':
-    [{label: 'Markdown Preview', command:  'markdown-it-preview:preview-file'}]
+    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
   '.tree-view .file .name[data-name$=\\.txt]':
-    [{label: 'Markdown Preview', command:  'markdown-it-preview:preview-file'}]
+    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
