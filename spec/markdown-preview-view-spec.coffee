@@ -266,8 +266,6 @@ describe "MarkdownPreviewView", ->
 
   describe "text selections", ->
     it "adds the `has-selection` class to the preview depending on if there is a text selection", ->
-      selectionSpy = spyOn(document, 'onselectionchange').andCallThrough()
-
       expect(preview.element.classList.contains('has-selection')).toBe false
 
       selection = window.getSelection()
@@ -275,18 +273,13 @@ describe "MarkdownPreviewView", ->
       selection.selectAllChildren(document.querySelector('atom-text-editor'))
 
       waitsFor ->
-        selectionSpy.callCount is 1
+        preview.element.classList.contains('has-selection') is true
 
       runs ->
-        expect(preview.element.classList.contains('has-selection')).toBe true
-
         selection.removeAllRanges()
 
       waitsFor ->
-        selectionSpy.callCount is 2
-
-      runs ->
-        expect(preview.element.classList.contains('has-selection')).toBe false
+        preview.element.classList.contains('has-selection') is false
 
   describe "when core:save-as is triggered", ->
     beforeEach ->
