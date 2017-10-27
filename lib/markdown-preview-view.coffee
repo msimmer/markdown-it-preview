@@ -117,6 +117,8 @@ class MarkdownPreviewView
       'core:copy': =>
         event.stopPropagation()
         @copyToClipboard()
+      'markdown-it-preview:select-all': =>
+        @selectAll()
       'markdown-it-preview:zoom-in': =>
         zoomLevel = parseFloat(getComputedStyle(@element).zoom)
         @element.style.zoom = zoomLevel + 0.1
@@ -275,6 +277,15 @@ class MarkdownPreviewView
     div.classList.add('markdown-spinner')
     div.textContent = 'Loading Markdown\u2026'
     @element.appendChild(div)
+
+  selectAll: ->
+    return if @loading
+
+    selection = window.getSelection()
+    selection.removeAllRanges()
+    range = document.createRange()
+    range.selectNode(@element)
+    selection.addRange(range)
 
   copyToClipboard: ->
     return if @loading

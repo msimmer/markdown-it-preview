@@ -8,7 +8,7 @@
   'cmd-_': 'markdown-it-preview:zoom-out'
   'cmd-0': 'markdown-it-preview:reset-zoom'
 
-'.platform-win32 .markdown-preview, .platform-linux .markdown-preview':
+'.platform-win32 .markdown-it-preview, .platform-linux .markdown-it-preview':
   'ctrl-+': 'markdown-it-preview:zoom-in'
   'ctrl-=': 'markdown-it-preview:zoom-in'
   'ctrl--': 'markdown-it-preview:zoom-out'
