@@ -300,7 +300,7 @@ class MarkdownPreviewView
     else
       @getHTML (error, html) ->
         if error?
-          console.warn('Copying Markdown as HTML failed', error)
+          atom.notifications.addError('Copying Markdown as HTML failed', {dismissable: true, detail: error.message})
         else
           atom.clipboard.write(html)
 
@@ -321,9 +321,8 @@ class MarkdownPreviewView
 
       @getHTML (error, htmlBody) =>
         if error?
-          console.warn('Saving Markdown as HTML failed', error)
+          atom.notifications.addError('Saving Markdown as HTML failed', {dismissable: true, detail: error.message})
         else
-
           html = """
             <!DOCTYPE html>
             <html>
