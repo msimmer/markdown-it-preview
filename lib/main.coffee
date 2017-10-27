@@ -1,6 +1,6 @@
 url = require 'url'
 fs = require 'fs-plus'
-{CompositeDisposable} = require 'atom'
+{Disposable, CompositeDisposable} = require 'atom'
 
 MarkdownPreviewView = null
 renderer = null
@@ -12,6 +12,23 @@ isMarkdownPreviewView = (object) ->
 module.exports =
   activate: ->
     @disposables = new CompositeDisposable()
+
+    @disposables.add atom.config.observe 'markdown-it-preview.grammars', (grammars) =>
+      @commandSubscription?.dispose()
+
+      grammars ?= []
+      grammars = grammars.map (grammar) -> grammar.replace(/\./g, ' ')
+      for grammar in grammars
+        @commandSubscription = atom.commands.add "atom-text-editor[data-grammar='#{grammar}']",
+          'markdown-it-preview:toggle': =>
+            @toggle()
+          'markdown-it-preview:copy-html':
+            displayName: 'Markdown Preview: Copy HTML'
+            didDispatch: => @copyHTML()
+          'markdown-it-preview:save-as-html':
+            displayName: 'Markdown Preview: Save as HTML'
+            didDispatch: => @saveAsHTML()
+
     @disposables.add atom.commands.add 'atom-workspace',
       'markdown-it-preview:toggle': =>
         @toggle()
@@ -20,7 +37,7 @@ module.exports =
       'markdown-it-preview:save-as-html': =>
         @saveAsHTML()
       'markdown-it-preview:toggle-break-on-single-newline': ->
-        keyPath = 'markdown-preview.breakOnSingleNewline'
+        keyPath = 'markdown-it-preview.breakOnSingleNewline'
         atom.config.set(keyPath, not atom.config.get(keyPath))
       'markdown-it-preview:toggle-github-style': ->
         keyPath = 'markdown-it-preview.useGitHubStyle'
@@ -29,7 +46,7 @@ module.exports =
     previewFile = @previewFile.bind(this)
     for extension in ['markdown', 'md', 'mdown', 'mkd', 'mkdown', 'ron', 'txt'].
       @disposables.add atom.commands.add ".tree-view .file .name[data-name$=\\.#{extension}]",
-        'markdown-preview:preview-file', previewFile
+        'markdown-it-preview:preview-file', previewFile
 
     @disposables.add atom.workspace.addOpener (uriToOpen) =>
       [protocol, path] = uriToOpen.split('://')
@@ -47,6 +64,7 @@ module.exports =
 
   deactivate: ->
     @disposables.dispose()
+    @commandSubscription.dispose()
 
   createMarkdownPreviewView: (state) ->
     if state.editorId or fs.isFileSync(state.filePath)
