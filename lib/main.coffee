@@ -1,6 +1,6 @@
 url = require 'url'
 fs = require 'fs-plus'
-{Disposable, CompositeDisposable} = require 'atom'
+{CompositeDisposable} = require 'atom'
 
 MarkdownPreviewView = null
 renderer = null
@@ -12,6 +12,7 @@ isMarkdownPreviewView = (object) ->
 module.exports =
   activate: ->
     @disposables = new CompositeDisposable()
+    @commandSubscriptions = new CompositeDisposable()
 
     @disposables.add atom.config.observe 'markdown-it-preview.grammars', (grammars) =>
       @commandSubscription?.dispose()
@@ -28,6 +29,8 @@ module.exports =
           'markdown-it-preview:save-as-html':
             displayName: 'Markdown Preview: Save as HTML'
             didDispatch: => @saveAsHTML()
+
+      return # Do not return the results of the for loop
 
     @disposables.add atom.commands.add 'atom-workspace',
       'markdown-it-preview:toggle': =>
@@ -64,7 +67,7 @@ module.exports =
 
   deactivate: ->
     @disposables.dispose()
-    @commandSubscription.dispose()
+    @commandSubscriptions.dispose()
 
   createMarkdownPreviewView: (state) ->
     if state.editorId or fs.isFileSync(state.filePath)

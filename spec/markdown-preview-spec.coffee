@@ -315,6 +315,35 @@ describe "Markdown preview package", ->
       runs ->
         expect(atom.workspace.getActiveTextEditor()).toBeTruthy()
 
+  describe "markdown-it-preview:toggle", ->
+    beforeEach ->
+      waitsForPromise ->
+        atom.workspace.open("code-block.md")
+
+    it "does not exist for text editors that are not set to a grammar defined in `markdown-it-preview.grammars`", ->
+      atom.config.set('markdown-it-preview.grammars', ['source.weird-md'])
+      editorElement = atom.workspace.getActiveTextEditor().getElement()
+      commands = atom.commands.findCommands({target: editorElement}).map (command) -> command.name
+      expect(commands).not.toContain 'markdown-it-preview:toggle'
+
+    it "exists for text editors that are set to a grammar defined in `markdown-it-preview.grammars`", ->
+      atom.config.set('markdown-it-preview.grammars', ['source.gfm'])
+      editorElement = atom.workspace.getActiveTextEditor().getElement()
+      console.log editorElement.getAttribute('data-grammar')
+      commands = atom.commands.findCommands({target: editorElement}).map (command) -> command.name
+      expect(commands).toContain 'markdown-it-preview:toggle'
+
+    it "updates whenever the list of grammars changes", ->
+      # Last two tests combined
+      atom.config.set('markdown-it-preview.grammars', ['source.gfm', 'text.plain'])
+      editorElement = atom.workspace.getActiveTextEditor().getElement()
+      commands = atom.commands.findCommands({target: editorElement}).map (command) -> command.name
+      expect(commands).toContain 'markdown-it-preview:toggle'
+
+      atom.config.set('markdown-it-preview.grammars', ['source.weird-md', 'text.plain'])
+      commands = atom.commands.findCommands({target: editorElement}).map (command) -> command.name
+      expect(commands).not.toContain 'markdown-it-preview:toggle'
+
   describe "when markdown-it-preview:copy-html is triggered", ->
     it "copies the HTML to the clipboard", ->
       waitsForPromise ->
