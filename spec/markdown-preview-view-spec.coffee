@@ -20,6 +20,8 @@ describe "MarkdownPreviewView", ->
     preview = new MarkdownPreviewView({filePath})
     jasmine.attachToDOM(preview.element)
 
+    spyOn(atom.packages, 'hasActivatedInitialPackages').andReturn true
+
     waitsForPromise ->
       atom.packages.activatePackage('language-ruby')
 

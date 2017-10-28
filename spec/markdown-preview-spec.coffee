@@ -24,6 +24,9 @@ describe "Markdown preview package", ->
     waitsForPromise ->
       atom.packages.activatePackage('language-gfm')
 
+    runs ->
+      spyOn(atom.packages, 'hasActivatedInitialPackages').andReturn true
+
   expectPreviewInSplitPane = ->
     waitsFor -> atom.workspace.getCenter().getPanes().length is 2
 
