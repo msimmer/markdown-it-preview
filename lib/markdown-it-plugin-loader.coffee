@@ -40,6 +40,7 @@ class MarkdownItPluginLoader
     projectPath = @getProjectPath()
 
     pluginMap = new Map()
+    id = 1
     plugins.forEach (entry) =>
       [name, args] = @destructurePluginEntry(entry)
       absolutePath = path.resolve(projectPath, 'node_modules', name)
@@ -47,7 +48,8 @@ class MarkdownItPluginLoader
       # test that the package exists and add it to the map if it does
       try
         require.resolve absolutePath
-        pluginMap.set(name, {absolutePath, args})
+        pluginMap.set(id, {absolutePath, args})
+        id++
       catch error
         atom.notifications.addError "MarkdownIt Plugin Loader couldn't find package #{name}", {dismissable: true}
 
