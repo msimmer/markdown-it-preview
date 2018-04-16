@@ -8,18 +8,18 @@ describe "Markdown preview package", ->
   [workspaceElement, preview] = []
 
   beforeEach ->
+    jasmine.useRealClock()
+
     fixturesPath = path.join(__dirname, 'fixtures')
     tempPath = temp.mkdirSync('atom')
     wrench.copyDirSyncRecursive(fixturesPath, tempPath, forceDelete: true)
     atom.project.setPaths([tempPath])
 
-    jasmine.useRealClock()
-
     workspaceElement = atom.views.getView(atom.workspace)
-    jasmine.attachToDOM(workspaceElement)
+    activationPromise = atom.packages.activatePackage('markdown-it-preview')
+    atom.commands.dispatch(workspaceElement, 'markdown-it-preview:toggle')
 
-    waitsForPromise ->
-      atom.packages.activatePackage("markdown-it-preview")
+    jasmine.attachToDOM(workspaceElement)
 
     waitsForPromise ->
       atom.packages.activatePackage('language-gfm')

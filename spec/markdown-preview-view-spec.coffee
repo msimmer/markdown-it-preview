@@ -7,11 +7,14 @@ MarkdownPreviewView = require '../lib/markdown-preview-view'
 renderer = require '../lib/renderer'
 
 describe "MarkdownPreviewView", ->
-  [file, preview, workspaceElement] = []
+  [preview, activationPromise, workspaceElement] = []
 
   beforeEach ->
-    # Makes _.debounce work
     jasmine.useRealClock()
+
+    workspaceElement = atom.views.getView(atom.workspace)
+    activationPromise = atom.packages.activatePackage('markdown-it-preview')
+    atom.commands.dispatch(workspaceElement, 'markdown-it-preview:toggle')
 
     filePath = atom.project.getDirectories()[0].resolve('subdir/file.markdown')
     preview = new MarkdownPreviewView({filePath})
@@ -23,9 +26,6 @@ describe "MarkdownPreviewView", ->
     waitsForPromise ->
       atom.packages.activatePackage('language-javascript')
 
-    waitsForPromise ->
-      atom.packages.activatePackage('markdown-it-preview')
-
   afterEach ->
     preview.destroy()
 
@@ -33,6 +33,9 @@ describe "MarkdownPreviewView", ->
     it "shows a loading spinner and renders the markdown", ->
       preview.showLoading()
       expect(preview.element.querySelector('.markdown-spinner')).toBeDefined()
+
+      waitsForPromise ->
+        activationPromise
 
       waitsForPromise ->
         preview.renderMarkdown()
@@ -119,7 +122,6 @@ describe "MarkdownPreviewView", ->
           def func
             x = 1
           end
-
         """
 
         # TODO: fix me
@@ -129,7 +131,6 @@ describe "MarkdownPreviewView", ->
         #   if a === 3 {
         #   b = 5
         #   }
-        #
         # """
 
     describe "when the code block's fence name doesn't have a matching grammar", ->
@@ -139,7 +140,6 @@ describe "MarkdownPreviewView", ->
           function f(x) {
             return x++;
           }
-
         """
 
     describe "when an editor cannot find the grammar that is later loaded", ->
