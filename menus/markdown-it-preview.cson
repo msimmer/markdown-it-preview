@@ -1,7 +1,7 @@
 'menu': [
   'label': 'Packages'
   'submenu': [
-    'label': 'Markdown It Preview'
+    'label': 'MarkdownIt Preview'
     'submenu': [
       'label': 'Toggle Preview'
       'command': 'markdown-it-preview:toggle'
@@ -10,27 +10,27 @@
 ]
 
 'context-menu':
-  '.markdown-it-preview': [
+  '.markdown-preview': [
     {label: 'Select All', command: 'markdown-it-preview:select-all'}
     {label: 'Save As HTML\u2026', command: 'core:save-as'}
   ]
-  '.markdown-it-preview.has-selection': [
+  '.markdown-preview.has-selection': [
     {label: 'Copy', command: 'core:copy'}
   ]
-  '.markdown-it-preview:not(.has-selection)': [
+  '.markdown-preview:not(.has-selection)': [
     {label: 'Copy As HTML', command: 'core:copy'}
   ]
   '.tree-view .file .name[data-name$=\\.markdown]':
-    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
+    [{label: 'MarkdownIt Preview', command: 'markdown-it-preview:preview-file'}]
   '.tree-view .file .name[data-name$=\\.md]':
-    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
+    [{label: 'MarkdownIt Preview', command: 'markdown-it-preview:preview-file'}]
   '.tree-view .file .name[data-name$=\\.mdown]':
-    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
+    [{label: 'MarkdownIt Preview', command: 'markdown-it-preview:preview-file'}]
   '.tree-view .file .name[data-name$=\\.mkd]':
-    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
+    [{label: 'MarkdownIt Preview', command: 'markdown-it-preview:preview-file'}]
   '.tree-view .file .name[data-name$=\\.mkdown]':
-    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
+    [{label: 'MarkdownIt Preview', command: 'markdown-it-preview:preview-file'}]
   '.tree-view .file .name[data-name$=\\.ron]':
-    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
+    [{label: 'MarkdownIt Preview', command: 'markdown-it-preview:preview-file'}]
   '.tree-view .file .name[data-name$=\\.txt]':
-    [{label: 'Markdown It Preview', command: 'markdown-it-preview:preview-file'}]
+    [{label: 'MarkdownIt Preview', command: 'markdown-it-preview:preview-file'}]
