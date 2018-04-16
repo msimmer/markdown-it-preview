@@ -18,7 +18,7 @@
     {label: 'Copy', command: 'core:copy'}
   ]
   '.markdown-preview:not(.has-selection)': [
-    {label: 'Copy As HTML', command: 'core:copy'}
+    {label: 'Copy HTML', command: 'core:copy'}
   ]
   '.tree-view .file .name[data-name$=\\.markdown]':
     [{label: 'MarkdownIt Preview', command: 'markdown-it-preview:preview-file'}]
