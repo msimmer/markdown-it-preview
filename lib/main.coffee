@@ -44,7 +44,7 @@ module.exports =
         atom.config.set(keyPath, not atom.config.get(keyPath))
 
     previewFile = @previewFile.bind(this)
-    for extension in ['markdown', 'md', 'mdown', 'mkd', 'mkdown', 'ron', 'txt'].
+    for extension in ['markdown', 'md', 'mdown', 'mkd', 'mkdown', 'ron', 'txt']
       @disposables.add atom.commands.add ".tree-view .file .name[data-name$=\\.#{extension}]",
         'markdown-it-preview:preview-file', previewFile
 

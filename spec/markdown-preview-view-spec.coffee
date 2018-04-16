@@ -74,7 +74,7 @@ describe "MarkdownPreviewView", ->
       expect(newPreview.getPath()).toBe preview.getPath()
 
     it "does not recreate a preview when the file no longer exists", ->
-      filePath = path.join(temp.mkdirSync('markdown-preview-'), 'foo.md')
+      filePath = path.join(temp.mkdirSync('markdown-it-preview-'), 'foo.md')
       fs.writeFileSync(filePath, '# Hi')
 
       preview.destroy()
@@ -198,7 +198,7 @@ describe "MarkdownPreviewView", ->
       it "doesn't change the URL when allowUnsafeProtocols is true", ->
         preview.destroy()
 
-        atom.config.set('markdown-preview.allowUnsafeProtocols', true)
+        atom.config.set('markdown-it-preview.allowUnsafeProtocols', true)
 
         filePath = path.join(temp.mkdirSync('atom'), 'foo.md')
         fs.writeFileSync(filePath, "![absolute](#{filePath})")
@@ -214,7 +214,7 @@ describe "MarkdownPreviewView", ->
     it "removes the URL when allowUnsafeProtocols is false", ->
       preview.destroy()
 
-      atom.config.set('markdown-preview.allowUnsafeProtocols', false)
+      atom.config.set('markdown-it-preview.allowUnsafeProtocols', false)
 
       filePath = path.join(temp.mkdirSync('atom'), 'foo.md')
       fs.writeFileSync(filePath, "![absolute](#{filePath})")
@@ -383,7 +383,7 @@ describe "MarkdownPreviewView", ->
          <p>encoding \u2192 issue</p>
         """
 
-  describe "when markdown-preview:zoom-in or markdown-preview:zoom-out are triggered", ->
+  describe "when markdown-it-preview:zoom-in or markdown-it-preview:zoom-out are triggered", ->
     it "increases or decreases the zoom level of the markdown preview element", ->
       jasmine.attachToDOM(preview.element)
 

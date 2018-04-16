@@ -307,7 +307,7 @@ describe "Markdown preview package", ->
       runs ->
         expect(titleChangedCallback).toHaveBeenCalled()
 
-  describe "when the URI opened does not have a markdown-preview protocol", ->
+  describe "when the URI opened does not have a markdown-it-preview protocol", ->
     it "does not throw an error trying to decode the URI (regression)", ->
       waitsForPromise ->
         atom.workspace.open('%')
@@ -340,9 +340,6 @@ describe "Markdown preview package", ->
       beforeEach ->
         waitsForPromise ->
           atom.packages.activatePackage('language-ruby')
-
-        waitsForPromise ->
-          atom.packages.activatePackage('markdown-preview')
 
         waitsForPromise ->
           atom.workspace.open("subdir/file.markdown")
